@@ -12,7 +12,10 @@ public class User {
     }
     public User (){}
     public String toString(){
-        return "User Name: "+ this.userName + " Phone:" + phoneNumber + " is he a real estate agent?" + isRealtor;
+        String output =  "Name: "+ this.userName + ", Phone:" + phoneNumber;
+        if (isRealtor())
+            output += " (,Real eastae agent)";
+        return output;
     }
     public String getUserName() {
         return userName;

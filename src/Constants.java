@@ -1,9 +1,5 @@
 public class Constants {
-    public static final int SOUTH = 10;
-    public static final int NORTH = 20;
-    public static final int NEGEV = 30;
-    public static final int CENTER = 40;
-    public static final int HASHARON = 50;
+
     public static final int MIN_PASS_LENGTH = 5;
     public static final String PHONE_NUMBER_STARTING_DIGITS = "05";
     public static final int IS_REALTOR = 1;

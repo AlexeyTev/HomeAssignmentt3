@@ -7,8 +7,8 @@ public class RealEstate {
     private final City [] cities;
     public RealEstate () {
         users = new User[] {
-                new User("M", "1234$", "0503306164", true),
-                new User("A", "1234$", "0526265823", true)
+                new User("May Tal", "1234$", "0503306164", false),
+                new User("Alex Tev", "1234$", "0526265823", true)
         };
         cities = new City[]{
                 new City("Beer Sheva", "Negev", new String[]{"Yerushalaim", "Tel Aviv"}),
@@ -30,12 +30,14 @@ public class RealEstate {
     }
 
     public void printAllProperties(){ //O(n)
+        if (properties!=null){
         for (int i = 0; i<properties.length;i++){
             System.out.print(i+1 + ")");
             System.out.println(properties[i]);
-        }
+        }}else System.out.println("No properties to show");
     }
     public void deleteProperty(User loggedInUser){//O(n)
+        if (properties!=null){
         System.out.println("What property you want to delete?");
         printProperties(loggedInUser);
         int chosenPropertyToDelete = scanner.nextInt();
@@ -53,7 +55,8 @@ public class RealEstate {
             }
             }
             properties=tempArray;
-        }
+        }}else System.out.println("No properties to delete");
+
 
     }
     private int searchIndexOfPropertyToDelete (User loggedInUser, int chosenProperty){//O(n)
@@ -101,7 +104,7 @@ public class RealEstate {
         }
         return userLoginIndex;
     }
-    public void createUser() {
+    public void createUser() { //O(1)
         User newUser = new User();
         setUserNameIfAvailable(newUser);
         setPasswordIfValid(newUser);
@@ -109,15 +112,15 @@ public class RealEstate {
         setIfUserRealtor(newUser);
         users = insertNewUser(newUser,users);
     }
-    private void setUserNameIfAvailable(User newUser){
-        String userName;
+    private void setUserNameIfAvailable(User newUser){//O(1)
+        String userName=null;
         do {
             System.out.println("Insert your desired user name:");
             userName = scanner.nextLine();
             if (checkIfUserNameAvailable(userName)){
                 newUser.setUserName(userName);
             }else System.out.println("This username is not available");
-        }while (newUser.getUserName()==null);
+        }while (newUser.getUserName().equals(""));
     }
     private boolean checkIfUserNameAvailable(String userName){
         boolean isAvailable = true;
@@ -131,7 +134,7 @@ public class RealEstate {
         }
         return isAvailable;
     }
-    private void setPasswordIfValid (User newUser){
+    private void setPasswordIfValid (User newUser){//O(1)
         String password;
         do {
             System.out.println("""
@@ -145,7 +148,7 @@ public class RealEstate {
                 newUser.setPassword(password);
         }while (newUser.getPassword()==null);
     }
-    private boolean checkIfValidPassword (String password){
+    private boolean checkIfValidPassword (String password){//O(n)
         boolean isValid = false;
         if (password.length()>=Constants.MIN_PASS_LENGTH){
             if (password.contains("$")||password.contains("%")||password.contains("_")){
@@ -156,7 +159,7 @@ public class RealEstate {
         }else System.out.println("Must be at least 5 characters long");
         return isValid;
     }
-    private void setPhoneNumberIfValid (User newUser){
+    private void setPhoneNumberIfValid (User newUser){ //O(1)
         String phoneNumber;
         do {
             System.out.println("Enter phone number: \n 1.Must start with 05 \n 2.Must be 10 digits long");
@@ -165,7 +168,7 @@ public class RealEstate {
                 newUser.setPhoneNumber(phoneNumber);
         }while (newUser.getPhoneNumber()==null);
     }
-    private boolean checkIfPhoneNumberValid (String phoneNumber){
+    private boolean checkIfPhoneNumberValid (String phoneNumber){//O(1)
         boolean isValid = false;
         if (phoneNumber.length()==10){
             if (phoneNumber.startsWith(Constants.PHONE_NUMBER_STARTING_DIGITS)){
@@ -174,7 +177,7 @@ public class RealEstate {
         }else System.out.println("Must be 10 digits long");
         return isValid;
     }
-    private void setIfUserRealtor (User newUser){
+    private void setIfUserRealtor (User newUser){//O(1)
         int isRealtor;
         do{
         System.out.println("Insert 1 if you are a real estate agent \n Insert 2 if you are not");
@@ -184,7 +187,7 @@ public class RealEstate {
             newUser.setRealtor(true);
         else newUser.setRealtor(false);
     }
-    private User[] insertNewUser (User newUser, User [] users){
+    private User[] insertNewUser (User newUser, User [] users){ //O(n)
         int userAmtIndex;
         if (users==null){
             userAmtIndex=0;
@@ -201,17 +204,20 @@ public class RealEstate {
         return tempArray;
     }
 
-    public void printProperties(User currentUser){ //O(n)
-        int amountPublishedByUser=0;
-        for (int i=0;i<this.properties.length;i++){
-            if (this.properties[i].getUser()==currentUser){
-                amountPublishedByUser++;
-                System.out.println(amountPublishedByUser + "." +this.properties[i]);
-            }
+    public void printProperties(User currentUser) { //O(n)
+        int amountPublishedByUser = 0;
+        if (properties != null) {
+
+            for (int i = 0; i < this.properties.length; i++) {
+                if (this.properties[i].getUser() == currentUser) {
+                    amountPublishedByUser++;
+                    System.out.println(amountPublishedByUser + "." + this.properties[i]);
+                }
+            }}
+            System.out.println("You have posted total of: " + amountPublishedByUser);
         }
-        System.out.println("You have posted total of: "+amountPublishedByUser);
-    }
-    public boolean publishNewProperty(User currentUser){
+
+    public boolean publishNewProperty(User currentUser){//O(n)
         boolean validToPublish=true;
         int maxAmountToPublish;
         if (currentUser.isRealtor())
@@ -276,7 +282,7 @@ public class RealEstate {
 
         return validToPublish;
     }
-    private Property setAllDataForProperty(Property newProperty){
+    private Property setAllDataForProperty(Property newProperty){//(O(1)
         System.out.println("Enter the property type: \n 1.Apartment in building \n 2.Penthouse \n 3.Private");
         int propertyType=scanner.nextInt();
         if (checkPropertyType(propertyType)) {
@@ -290,7 +296,7 @@ public class RealEstate {
         }
         return newProperty;
     }
-    private Property[] insertNewProperty(Property newProperty){
+    private Property[] insertNewProperty(Property newProperty){//O(n)
         int totalAmountOfProperties;
         if (this.properties==null){
             totalAmountOfProperties=0;
@@ -306,12 +312,12 @@ public class RealEstate {
         tempArray[totalAmountOfProperties]=newProperty;
         return tempArray;
     }
-    private int setPropertyNumFromUser(){
+    private int setPropertyNumFromUser(){//O(1)
         System.out.println("Enter the property number");
         int propertyNum = scanner.nextInt();
         return propertyNum;
     }
-    private float setPriceFromUser(){
+    private float setPriceFromUser(){//O(1)
         float price;
         do {
             System.out.println("What is the price");
@@ -319,19 +325,19 @@ public class RealEstate {
         }while (price<0);
         return price;
     }
-    private boolean setForRentFromUser(){
+    private boolean setForRentFromUser(){ //O(1)
         boolean forRent=true;
         int userChoice;
         do {
             System.out.println("Is the apartment for rent \n 1.yes \n 2.no");
             userChoice = scanner.nextInt();
-        }while (userChoice>2 || userChoice<1);
-        if (userChoice==2)
+        }while (userChoice>Constants.FOR_SALE || userChoice<Constants.FOR_RENT);
+        if (userChoice==Constants.FOR_SALE)
             forRent=false;
 
         return forRent;
     }
-    private float setNumOfRoomsFromUser(){
+    private float setNumOfRoomsFromUser(){ //O(1)
         float numOfRooms;
         do {
             System.out.println("Enter number of rooms");
@@ -339,7 +345,7 @@ public class RealEstate {
         }while (numOfRooms<1);
         return numOfRooms;
     }
-    private int setFloorFromUser(){
+    private int setFloorFromUser(){ //O(1)
         int floor;
         do {
             System.out.println("Enter the floor number");
@@ -347,14 +353,14 @@ public class RealEstate {
         }while (floor<0);
         return floor;
     }
-    private boolean checkPropertyType(int propertyType){
+    private boolean checkPropertyType(int propertyType){ //O(1)
         boolean isValidType=true;
         if (propertyType<Constants.BUILDING_APARTMENT || propertyType>Constants.PRIVATE_HOME){
             isValidType=false;
         }
         return isValidType;
     }
-    private boolean isStreetValid(String streetName, String [] cityStreets){
+    private boolean isStreetValid(String streetName, String [] cityStreets){ //O(n)
         boolean isValid = false;
         for (int i=0; i<cityStreets.length;i++){
             if (cityStreets[i].equals(streetName)){
@@ -364,7 +370,7 @@ public class RealEstate {
         }
         return isValid;
     }
-    private int isCityValid (String city){
+    private int isCityValid (String city){ //O(n)
         int cityIndex=Constants.NOT_VALID_CITY;
         for (int i=0;i<cities.length;i++){
             if (cities[i].getCityName().equals(city)){
@@ -415,11 +421,13 @@ public class RealEstate {
                 filteredPropertiesIndex = indexOfFilterByPrice(minPriceRange, maxPriceRange, filteredPropertiesIndex);
             }
         }
+        Property[] filtered = null;
         if (filteredPropertiesIndex!=null){
-            Property[] filtered = new Property[filteredPropertiesIndex.length];
+            filtered = new Property[filteredPropertiesIndex.length];
             for (int i = 0; i < filtered.length; i++) {
                 filtered[i] = properties[filteredPropertiesIndex[i]];
-            }}
+            }
+        }
 
         return filtered;
 

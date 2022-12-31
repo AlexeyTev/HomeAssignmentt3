@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class City {
     private String cityName;
     private String geographicalArea;
@@ -31,5 +33,12 @@ public class City {
 
     public void setStreets(String[] streets) {
         this.streets = streets;
+    }
+
+    @Override
+    public String toString() {
+        return "" + cityName + '\'' +
+                ", geographicalArea='" + geographicalArea + '\'' +
+                ", streets=" + Arrays.toString(streets);
     }
 }
